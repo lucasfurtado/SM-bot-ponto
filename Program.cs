@@ -15,10 +15,10 @@ namespace PunchTheClock
         {
             DiscordClient discord = new DiscordClient(new DiscordConfiguration()
             {
-                Token = "ODg1NjM1NzY3MTYwOTQyNjQy.YTp6lQ.RW7OFlZHmr8y8TL_3um-IS7M0HU",
+                Token = "Token Here!",
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.AllUnprivileged
-            });
+            });      
 
             discord.MessageCreated += async (s, e) =>
             {
