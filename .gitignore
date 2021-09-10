@@ -392,6 +392,9 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 
+# Local Variable
+config.json
+
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
