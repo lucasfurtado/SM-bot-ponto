@@ -1,5 +1,7 @@
 ﻿using DSharpPlus;
+using DSharpPlus.CommandsNext;
 using Newtonsoft.Json;
+using PunchTheClock.Commands;
 using PunchTheClock.Entities;
 using System;
 using System.IO;
@@ -23,13 +25,19 @@ namespace PunchTheClock
                 Token = token,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.AllUnprivileged
-            });      
+            });
 
-            discord.MessageCreated += async (s, e) =>
+
+            CommandsNextExtension command = discord.UseCommandsNext(new CommandsNextConfiguration()
             {
-                if (e.Message.Content.ToLower().StartsWith("ping"))
-                    await e.Message.RespondAsync("pong!");
-            };
+                StringPrefixes = new[] { "!" },
+                CaseSensitive = false,
+                IgnoreExtraArguments = true,
+                EnableDms = false
+            });
+
+            command.RegisterCommands<GenerateRandomNumber>();
+            command.RegisterCommands<PuchingIn>();
 
             await discord.ConnectAsync();
             await Task.Delay(-1);
@@ -37,7 +45,8 @@ namespace PunchTheClock
 
         public static string GetToken()
         {
-            StreamReader reader = new StreamReader("E:\\My Projects\\PunchTheClock\\config.json"); //change your local file that contains the token
+            //StreamReader reader = new StreamReader("E:\\My Projects\\PunchTheClock\\config.json"); //notebook lucas
+            StreamReader reader = new StreamReader("C:\\Users\\lucas\\Documents\\Punch-In\\bot-punch-the-clock\\config.json");  //computador lucas
             string jsonString = reader.ReadToEnd();
             BotToken botToken = JsonConvert.DeserializeObject<BotToken>(jsonString);
             return botToken.Token;
