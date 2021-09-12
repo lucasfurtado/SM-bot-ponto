@@ -1,5 +1,8 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
+using PunchTheClock.BBL;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,28 +13,36 @@ namespace PunchTheClock.Commands
     class PuchingIn : BaseCommandModule
     {
         [Command("entrando")]
-        public async Task GetIn(CommandContext ctx)
+        public async Task GetInAsync(CommandContext ctx)
         {
-            await ctx.RespondAsync("Entendi o comando entrou!");
+            PuchingInBBL gBBL = new PuchingInBBL();
+            await gBBL.AddUser(ctx.User.Id);
+            await ctx.RespondAsync($"{ctx.User.Username} entrou as {DateTime.Now}!");
         }
 
         [Command("pausa")]
-        public async Task LunchTime(CommandContext ctx)
+        public async Task LunchTimeAsync(CommandContext ctx)
         {
-            await ctx.RespondAsync("Entendi o comando pausa!");
+            PuchingInBBL gBBL = new PuchingInBBL();
+            await gBBL.PauseTime(ctx.User.Id);
+            await ctx.RespondAsync($"{ctx.User.Username} pausou as {DateTime.Now}!");
         }
 
         [Command("voltei")]
-        public async Task BackIn(CommandContext ctx)
+        public async Task BackInAsync(CommandContext ctx)
         {
-            await ctx.RespondAsync("Entendi o comando voltei!");
+            PuchingInBBL gBBL = new PuchingInBBL();
+            await gBBL.BackIn(ctx.User.Id);
+            await ctx.RespondAsync($"{ctx.User.Username} voltou as {DateTime.Now}!");
         }
 
 
         [Command("sai")]
-        public async Task Exit(CommandContext ctx)
+        public async Task ExitAsync(CommandContext ctx)
         {
-            await ctx.RespondAsync("Entendi o comando sai!");
+            PuchingInBBL gBBL = new PuchingInBBL();
+            double aux = gBBL.ExitTime(ctx.User.Id);
+            await ctx.RespondAsync($"{ctx.User.Username}! saiu as {DateTime.Now} " + $"Tempo total: {aux}");
         }
     }
 }

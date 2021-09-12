@@ -10,7 +10,7 @@ namespace PunchTheClock.Commands
     class GenerateRandomNumber : BaseCommandModule
     {
         [Command("random")]
-        public async Task GererateRandomNumber(CommandContext ctx, int min, int max)
+        public async Task GererateRandomNumberAsync(CommandContext ctx, int min, int max)
         {
             Random random = new Random();
             int number = random.Next(min,max);

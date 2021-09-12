@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using DSharpPlus.EventArgs;
 
 namespace PunchTheClock
 {
@@ -20,7 +21,6 @@ namespace PunchTheClock
 
         static async Task MainAsync(string token)
         {
-
             DiscordClient discord = new DiscordClient(new DiscordConfiguration()
             {
                 Token = token,
@@ -31,7 +31,7 @@ namespace PunchTheClock
                 MinimumLogLevel = LogLevel.Debug,
             });
 
-            discord.MessageCreated += Discord_MessageCreated;
+            //discord.MessageCreated += Discord_MessageCreated;
 
             CommandsNextExtension command = discord.UseCommandsNext(new CommandsNextConfiguration()
             {
@@ -48,10 +48,12 @@ namespace PunchTheClock
             await Task.Delay(-1);
         }
 
-        private static Task Discord_MessageCreated(DiscordClient sender, DSharpPlus.EventArgs.MessageCreateEventArgs e)
+        /*
+        private static Task Discord_MessageCreated(DiscordClient sender, MessageCreateEventArgs e)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
+        */
 
         public static string GetToken()
         {
@@ -60,12 +62,6 @@ namespace PunchTheClock
             string jsonString = reader.ReadToEnd();
             BotToken botToken = JsonConvert.DeserializeObject<BotToken>(jsonString);
             return botToken.Token;
-        }
-
-        private Task CommandExecuted(CommandExecutionEventArgs e)
-        {
-            Console.WriteLine($"{e.Context.User.Username}");
-            return Task.CompletedTask;
         }
     }
 }

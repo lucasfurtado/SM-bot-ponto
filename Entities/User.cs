@@ -4,13 +4,13 @@ using System.Text;
 
 namespace PunchTheClock.Entities
 {
-    class User
+    public  class User
     {
 
         public ulong Id { get; private set; }
         public ulong TotalTime { get; private set; }
         public DateTime EnterAt { get; private set; }
-        public DateTime? ExitAt { get; private set; }
+        public DateTime ExitAt { get; private set; }
         public List<DateTime> PausesAt { get; private set; }
         public List<DateTime> PausesOutAt { get; private set; }
 
@@ -19,14 +19,20 @@ namespace PunchTheClock.Entities
             Id = id;
             TotalTime = 0;
             EnterAt = DateTime.Now;
-            ExitAt = null;
             PausesAt = new List<DateTime>();
+            PausesOutAt = new List<DateTime>();
         }
 
-        public void CalculateTotalTime()
+        public double CalculateTotalTime()
         {
-            //code
-            //here
+            TimeSpan minusTime = new TimeSpan();
+            TimeSpan totalTime = new TimeSpan();
+            for (int i = 0; i < PausesAt.Count; i++)
+            {
+                minusTime = (PausesOutAt[i] - PausesAt[i]) + minusTime;
+            }
+            totalTime = (EnterAt - ExitAt) - minusTime;
+            return totalTime.TotalHours;
         }
     }
 }
