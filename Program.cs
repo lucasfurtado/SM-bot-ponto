@@ -6,6 +6,7 @@ using PunchTheClock.Entities;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace PunchTheClock
 {
@@ -24,9 +25,13 @@ namespace PunchTheClock
             {
                 Token = token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged
+                Intents = DiscordIntents.AllUnprivileged,
+                GatewayCompressionLevel = GatewayCompressionLevel.Stream,
+                ReconnectIndefinitely = true,
+                MinimumLogLevel = LogLevel.Debug,
             });
 
+            discord.MessageCreated += Discord_MessageCreated;
 
             CommandsNextExtension command = discord.UseCommandsNext(new CommandsNextConfiguration()
             {
@@ -43,6 +48,11 @@ namespace PunchTheClock
             await Task.Delay(-1);
         }
 
+        private static Task Discord_MessageCreated(DiscordClient sender, DSharpPlus.EventArgs.MessageCreateEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         public static string GetToken()
         {
             //StreamReader reader = new StreamReader("E:\\My Projects\\PunchTheClock\\config.json"); //notebook lucas
@@ -50,6 +60,12 @@ namespace PunchTheClock
             string jsonString = reader.ReadToEnd();
             BotToken botToken = JsonConvert.DeserializeObject<BotToken>(jsonString);
             return botToken.Token;
+        }
+
+        private Task CommandExecuted(CommandExecutionEventArgs e)
+        {
+            Console.WriteLine($"{e.Context.User.Username}");
+            return Task.CompletedTask;
         }
     }
 }
