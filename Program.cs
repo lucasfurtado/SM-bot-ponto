@@ -31,29 +31,22 @@ namespace PunchTheClock
                 MinimumLogLevel = LogLevel.Debug,
             });
 
-            //discord.MessageCreated += Discord_MessageCreated;
-
             CommandsNextExtension command = discord.UseCommandsNext(new CommandsNextConfiguration()
             {
                 StringPrefixes = new[] { "!" },
                 CaseSensitive = false,
                 IgnoreExtraArguments = true,
-                EnableDms = false
+                //EnableDms = false
             });
 
+            command.RegisterCommands<Greetings>();
             command.RegisterCommands<GenerateRandomNumber>();
             command.RegisterCommands<PuchingIn>();
+            command.RegisterCommands<Fun>();
 
             await discord.ConnectAsync();
             await Task.Delay(-1);
         }
-
-        /*
-        private static Task Discord_MessageCreated(DiscordClient sender, MessageCreateEventArgs e)
-        {
-            return Task.CompletedTask;
-        }
-        */
 
         public static string GetToken()
         {

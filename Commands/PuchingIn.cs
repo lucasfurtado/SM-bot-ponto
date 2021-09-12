@@ -7,10 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace PunchTheClock.Commands
 {
-    class PuchingIn : BaseCommandModule
+    public class PuchingIn : BaseCommandModule
     {
         [Command("entrando")]
         public async Task GetInAsync(CommandContext ctx)
@@ -37,12 +38,12 @@ namespace PunchTheClock.Commands
         }
 
 
-        [Command("sai")]
+        [Command("saindo")]
         public async Task ExitAsync(CommandContext ctx)
         {
             PuchingInBBL gBBL = new PuchingInBBL();
             double aux = gBBL.ExitTime(ctx.User.Id);
-            await ctx.RespondAsync($"{ctx.User.Username}! saiu as {DateTime.Now} " + $"Tempo total: {aux}");
+            await ctx.RespondAsync($"{ctx.User.Username}! saiu as {DateTime.Now} " + $"Tempo total: {aux.ToString("F2",CultureInfo.InvariantCulture)}");
         }
     }
 }

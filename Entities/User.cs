@@ -8,7 +8,7 @@ namespace PunchTheClock.Entities
     {
 
         public ulong Id { get; private set; }
-        public ulong TotalTime { get; private set; }
+        public double TotalTime { get; private set; }
         public DateTime EnterAt { get; private set; }
         public DateTime ExitAt { get; private set; }
         public List<DateTime> PausesAt { get; private set; }
@@ -25,14 +25,14 @@ namespace PunchTheClock.Entities
 
         public double CalculateTotalTime()
         {
-            TimeSpan minusTime = new TimeSpan();
-            TimeSpan totalTime = new TimeSpan();
+            ExitAt = DateTime.Now;
+            double pauseTime = 0;
             for (int i = 0; i < PausesAt.Count; i++)
             {
-                minusTime = (PausesOutAt[i] - PausesAt[i]) + minusTime;
+                pauseTime += (PausesOutAt[i] - PausesAt[i]).TotalHours;
             }
-            totalTime = (EnterAt - ExitAt) - minusTime;
-            return totalTime.TotalHours;
+            TotalTime = (ExitAt - EnterAt).TotalHours - pauseTime;
+            return TotalTime;
         }
     }
 }
