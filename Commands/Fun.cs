@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using PunchTheClock.Helpers;
 
 namespace PunchTheClock.Commands
 {
@@ -12,7 +13,14 @@ namespace PunchTheClock.Commands
         [Command("Dorondondon")]
         public async Task N4Speed(CommandContext ctx)
         {
-            await ctx.RespondAsync("https://www.youtube.com/watch?v=IYH7_GzP4Tg");
+            if(ctx.Channel.Id != StaticVariables.ChannelsId.PunchInChannel)
+            {
+                await ctx.RespondAsync("https://www.youtube.com/watch?v=IYH7_GzP4Tg");
+            }
+            else
+            {
+                await ctx.RespondAsync(StaticMessages.Unauthorized.UnauthorizedChannel);
+            }
         }
     }
 }

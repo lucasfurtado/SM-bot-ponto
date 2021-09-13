@@ -19,14 +19,22 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar ao bot que entrou.")]
         public async Task GetInAsync(CommandContext ctx)
         {
-            PuchingInBBL gBBL = new PuchingInBBL();
-            if (gBBL.AddUser(ctx.User.Id))
+            if(ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
-                await ctx.RespondAsync($"{ctx.User.Username} entrou as {DateTime.Now}!");
+                PuchingInBBL gBBL = new PuchingInBBL();
+                if (gBBL.AddUser(ctx.User.Id))
+                {
+                    DateTime now = new DateTime();
+                    await ctx.RespondAsync($"{ctx.User.Username} entrou às {DateTime.Now.ToString("HH:mm:ss")}!");
+                }
+                else
+                {
+                    await ctx.RespondAsync($"{ctx.User.Username} você já usuou o comando !entrou antes.");
+                }
             }
             else
             {
-                await ctx.RespondAsync($"{ctx.User.Username} você já entrou hoje!");
+                await ctx.RespondAsync(StaticMessages.Unauthorized.UnauthorizedChannel);
             }
         }
 
@@ -35,15 +43,23 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar que está ausente no momento.")]
         public async Task LunchTimeAsync(CommandContext ctx)
         {
-            PuchingInBBL gBBL = new PuchingInBBL();
-            if (gBBL.PauseTime(ctx.User.Id))
+            if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
-                await ctx.RespondAsync($"{ctx.User.Username} pausou as {DateTime.Now}!");
+                PuchingInBBL gBBL = new PuchingInBBL();
+                if (gBBL.PauseTime(ctx.User.Id))
+                {
+                    await ctx.RespondAsync($"{ctx.User.Username} pausou às {DateTime.Now.ToString("HH:mm:ss")}!");
+                }
+                else
+                {
+                    await ctx.RespondAsync($"{ctx.User.Username} você não usou o comando !entrei hoje ou você ainda está em pausa!");
+                }
             }
             else
             {
-                await ctx.RespondAsync($"{ctx.User.Username} você não usou o comando !entrei hoje ou ainda está em pausa!");
+                await ctx.RespondAsync(StaticMessages.Unauthorized.UnauthorizedChannel);
             }
+            
         }
 
         [Command("voltando")]
@@ -51,35 +67,49 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar que o funcionário está voltando da pausa.")]
         public async Task BackInAsync(CommandContext ctx)
         {
-            PuchingInBBL gBBL = new PuchingInBBL();
-            if (gBBL.BackIn(ctx.User.Id))
+            if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
-                await ctx.RespondAsync($"{ctx.User.Username} voltou as {DateTime.Now}!");
+                PuchingInBBL gBBL = new PuchingInBBL();
+                if (gBBL.BackIn(ctx.User.Id))
+                {
+                    await ctx.RespondAsync($"{ctx.User.Username} voltou às {DateTime.Now.ToString("HH:mm:ss")}!");
+                }
+                else
+                {
+                    await ctx.RespondAsync($"{ctx.User.Username} você não está em !pausa ou ainda não usou o comando !entrei hoje.");
+                }
             }
             else
             {
-                await ctx.RespondAsync($"{ctx.User.Username} você não está pausado(a) ou não usou o comando !entrei hoje");
+                await ctx.RespondAsync(StaticMessages.Unauthorized.UnauthorizedChannel);
             }
         }
-
 
         [Command("saindo")]
         [Aliases("sair")]
         [Description("Comando para informar que está saindo e para informar quantas horas o funcionário fez hoje.")]
         public async Task ExitAsync(CommandContext ctx)
         {
-            PuchingInBBL gBBL = new PuchingInBBL();
-            double aux = gBBL.ExitTime(ctx.User.Id);
-            if(aux != 0)
+            if(ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
-                await ctx.RespondAsync($"{ctx.User.Username} saiu as {DateTime.Now} " + $"Tempo total: {aux.ToString("F2", CultureInfo.InvariantCulture)}");
-                await gBBL.RemoveUser(ctx.User.Id);
+                PuchingInBBL gBBL = new PuchingInBBL();
+                double aux = gBBL.ExitTime(ctx.User.Id);
+                if (aux != 0)
+                {
+                    await ctx.RespondAsync($"{ctx.User.Username} saiu às {DateTime.Now.ToString("HH:mm:ss")} " + $"Tempo total: {aux.ToString("F2", CultureInfo.InvariantCulture)}.");
+                    await gBBL.RemoveUser(ctx.User.Id);
+                }
+                else
+                {
+                    await ctx.RespondAsync($"{ctx.User.Username} você não usou !entrei hoje ou ainda está em pausa.");
+                }
             }
             else
             {
-                await ctx.RespondAsync($"{ctx.User.Username} você não usou !entrei hoje ou ainda está em pausa");
+                await ctx.RespondAsync(StaticMessages.Unauthorized.UnauthorizedChannel);
             }
-            
         }
+
+
     }
 }
