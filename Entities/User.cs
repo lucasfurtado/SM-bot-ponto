@@ -13,6 +13,9 @@ namespace PunchTheClock.Entities
         public DateTime ExitAt { get; private set; }
         public List<DateTime> PausesAt { get; private set; }
         public List<DateTime> PausesOutAt { get; private set; }
+        public bool IsOnline { get; set; }
+        public bool IsPaused { get; set; }
+        public bool IsOffline { get; set; }
 
         public User(ulong id)
         {
@@ -21,6 +24,9 @@ namespace PunchTheClock.Entities
             EnterAt = DateTime.Now;
             PausesAt = new List<DateTime>();
             PausesOutAt = new List<DateTime>();
+            IsOnline = true;
+            IsPaused = false;
+            IsOffline = false;
         }
 
         public double CalculateTotalTime()
@@ -34,5 +40,6 @@ namespace PunchTheClock.Entities
             TotalTime = (ExitAt - EnterAt).TotalHours - pauseTime;
             return TotalTime;
         }
+
     }
 }

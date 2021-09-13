@@ -8,29 +8,48 @@ namespace PunchTheClock.BBL
 {
     public class PuchingInBBL
     {
-        public Task AddUser(ulong id)
-        {
-            User user = new User(id);
-            Users.AllUsers.TryAdd(id, user);
-            return Task.CompletedTask;
-        }
-
-        public Task PauseTime(ulong id)
+        public bool AddUser(ulong id)
         {
             if(Users.AllUsers.TryGetValue(id, out User user))
             {
-                user.PausesAt.Add(DateTime.Now);
+                return false;
             }
-            return Task.CompletedTask;
+            else
+            {
+                User addUser = new User(id);
+                Users.AllUsers.TryAdd(id, addUser);
+                return true;
+            }
         }
 
-        public Task BackIn(ulong id)
+        public bool PauseTime(ulong id)
         {
             if(Users.AllUsers.TryGetValue(id, out User user))
             {
-                user.PausesOutAt.Add(DateTime.Now);
+                if(!user.IsPaused && user.IsOnline && !user.IsOffline)
+                {
+                    user.PausesAt.Add(DateTime.Now);
+                    user.IsPaused = true;
+                    user.IsOnline = false;
+                    return true;
+                }
             }
-            return Task.CompletedTask;
+            return false;
+        }
+
+        public bool BackIn(ulong id)
+        {
+            if(Users.AllUsers.TryGetValue(id, out User user))
+            {
+                if (user.IsPaused && !user.IsOnline && !user.IsOffline)
+                {
+                    user.PausesOutAt.Add(DateTime.Now);
+                    user.IsPaused = false;
+                    user.IsOnline = true;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public double ExitTime(ulong id)
@@ -38,9 +57,21 @@ namespace PunchTheClock.BBL
             double totalTime = 0;
             if (Users.AllUsers.TryGetValue(id, out User user))
             {
-                totalTime = user.CalculateTotalTime();
+                if(!user.IsPaused && user.IsOnline && !user.IsOffline)
+                {
+                    totalTime = user.CalculateTotalTime();
+                    user.IsOffline = true;
+                    user.IsOnline = false;
+                    user.IsPaused = false;
+                }
             }
             return totalTime;
+        }
+
+        public Task RemoveUser(ulong id)
+        {
+            Users.AllUsers.TryRemove(id, out User user);
+            return Task.CompletedTask;
         }
     }
 }
