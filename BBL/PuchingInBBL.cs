@@ -1,4 +1,6 @@
-﻿using PunchTheClock.Entities;
+﻿using DSharpPlus.CommandsNext;
+using DSharpPlus.Entities;
+using PunchTheClock.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -72,6 +74,28 @@ namespace PunchTheClock.BBL
         {
             Users.AllUsers.TryRemove(id, out User user);
             return Task.CompletedTask;
+        }
+
+        public double CurrentTime(DiscordUser? user, CommandContext ctx)
+        {
+            if (user != null)
+            {
+                if (Users.AllUsers.TryGetValue(user.Id, out User auxUser))
+                {
+                    if (auxUser.IsPaused) return -1;
+                    if (auxUser.IsOnline && !auxUser.IsPaused) return auxUser.CalculateTotalTime();
+                }
+                return -2;
+            }
+            else
+            {
+                if (Users.AllUsers.TryGetValue(ctx.User.Id, out User auxUser))
+                {
+                    if (auxUser.IsPaused) return -1;
+                    if (auxUser.IsOnline && !auxUser.IsPaused) return auxUser.CalculateTotalTime();
+                }
+                return -2;
+            }
         }
     }
 }

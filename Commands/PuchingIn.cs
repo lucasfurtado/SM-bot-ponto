@@ -19,7 +19,7 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar ao bot que entrou.")]
         public async Task GetInAsync(CommandContext ctx)
         {
-            if(ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
+            if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
                 PuchingInBBL gBBL = new PuchingInBBL();
                 if (gBBL.AddUser(ctx.User.Id))
@@ -59,7 +59,6 @@ namespace PunchTheClock.Commands
             {
                 await ctx.RespondAsync(StaticMessages.Unauthorized.UnauthorizedChannel);
             }
-            
         }
 
         [Command("voltando")]
@@ -90,7 +89,7 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar que está saindo e para informar quantas horas o funcionário fez hoje.")]
         public async Task ExitAsync(CommandContext ctx)
         {
-            if(ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
+            if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
                 PuchingInBBL gBBL = new PuchingInBBL();
                 double aux = gBBL.ExitTime(ctx.User.Id);
@@ -110,6 +109,50 @@ namespace PunchTheClock.Commands
             }
         }
 
-
+        [Command("time")]
+        public async Task ReturnTime(CommandContext ctx, [RemainingText] DiscordUser user = null)
+        {
+            if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
+            {
+                PuchingInBBL pBBL = new PuchingInBBL();
+                double time = 0;
+                if (user != null)
+                {
+                    time = pBBL.CurrentTime(user, ctx);
+                    switch (time)
+                    {
+                        case -1:
+                            await ctx.RespondAsync($"{user.Username} não foi possível calcular pois o usuário está em pausa e não existe esse método para calcular a hora ainda. Peço perdão pelo vacilo =)");
+                            break;
+                        case -2:
+                            await ctx.RespondAsync($"{user.Username} não entrou ainda.");
+                            break;
+                        default:
+                            await ctx.RespondAsync($"{user.Username} está online {time.ToString("F2", CultureInfo.InvariantCulture)} horas.");
+                            break;
+                    }
+                }
+                else
+                {
+                    time = pBBL.CurrentTime(null, ctx);
+                    switch (time)
+                    {
+                        case -1:
+                            await ctx.RespondAsync($"{ctx.User.Username} não foi possível calcular pois você está em pausa e não existe esse método para calcular a hora ainda. Peço perdão pelo vacilo =)");
+                            break;
+                        case -2:
+                            await ctx.RespondAsync($"{ctx.User.Username} você não entrou ainda.");
+                            break;
+                        default:
+                            await ctx.RespondAsync($"{ctx.User.Username} está online {time.ToString("F2", CultureInfo.InvariantCulture)} horas.");
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                await ctx.RespondAsync(StaticMessages.Unauthorized.UnauthorizedChannel);
+            }
+        }
     }
 }
