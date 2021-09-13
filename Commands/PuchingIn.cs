@@ -110,6 +110,8 @@ namespace PunchTheClock.Commands
         }
 
         [Command("time")]
+        [Aliases("tempo")]
+        [Description("Comando para que o usuário saiba o tempo que está online.")]
         public async Task ReturnTime(CommandContext ctx, [RemainingText] DiscordUser user = null)
         {
             if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
