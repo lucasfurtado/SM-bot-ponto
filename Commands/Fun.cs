@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using PunchTheClock.Helpers;
 using DSharpPlus.Entities;
 using System.Linq;
+using DSharpPlus.VoiceNext;
+using DSharpPlus;
 
 namespace PunchTheClock.Commands
 {
@@ -25,11 +27,13 @@ namespace PunchTheClock.Commands
             }
         }
 
-        [Command("testDaily")]
-        public async Task Pull(CommandContext ctx)
+        [Command("daily")]
+        public async Task TestDayli(CommandContext ctx)
         {
+            //ctx.Client.GetVoiceNext();
             if (ctx.Guild.OwnerId == 437051906599157761)
             {
+                
                 List<DiscordMember> listDiscordMembers = new List<DiscordMember>();
                 List<ulong> listId = new List<ulong>();
                 var aux = ctx.Guild.Members;
@@ -42,10 +46,28 @@ namespace PunchTheClock.Commands
                 {
                     if(aux.TryGetValue(item, out DiscordMember member))
                     {
-                        ctx.Channel.PlaceMemberAsync(member);
+                        await member.PlaceInAsync(ctx.Guild.GetChannel(885345111280599084));
+                        //await ctx.Channel.PlaceMemberAsync(member);
                     }
                 }
             }
+        }
+
+        [Command("entry")]
+        public async Task Join(CommandContext ctx)
+        {
+            var vnexta = ctx.Client.UseVoiceNext();
+
+            var vnc = vnexta.GetConnection(ctx.Guild);
+            if (vnc != null)
+                throw new InvalidOperationException("Already connected in this guild.");
+
+            var chn = ctx.Member?.VoiceState?.Channel;
+            if (chn == null)
+                throw new InvalidOperationException("You need to be in a voice channel.");
+
+            vnc = await vnexta.ConnectAsync(chn);
+            await ctx.RespondAsync("👌");
         }
     }
 }

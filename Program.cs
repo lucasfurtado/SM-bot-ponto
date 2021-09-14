@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using DSharpPlus.EventArgs;
+using DSharpPlus.Entities;
 
 namespace PunchTheClock
 {
@@ -28,7 +29,8 @@ namespace PunchTheClock
                 Intents = DiscordIntents.AllUnprivileged,
                 GatewayCompressionLevel = GatewayCompressionLevel.Stream,
                 ReconnectIndefinitely = true,
-                MinimumLogLevel = LogLevel.Debug
+                MinimumLogLevel = LogLevel.Debug,
+                AutoReconnect = true,
             });
 
             CommandsNextExtension command = discord.UseCommandsNext(new CommandsNextConfiguration()
