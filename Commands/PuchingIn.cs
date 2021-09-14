@@ -156,5 +156,46 @@ namespace PunchTheClock.Commands
                 await ctx.RespondAsync(StaticMessages.Unauthorized.UnauthorizedChannel);
             }
         }
+
+        [Command("status")]
+        [Aliases("agora")]
+        [Description("Comando que informa ao usuário qual status no momento do usuário.")]
+        public async Task UserStatus(CommandContext ctx, [RemainingText] DiscordUser user = null)
+        {
+            if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
+            {
+                PuchingInBBL pBBL = new PuchingInBBL();
+                if (user != null)
+                {
+                    switch (pBBL.UserStatus(user, ctx))
+                    {
+                        case 1:
+                            await ctx.RespondAsync($"{user.Username} está em pausa.");
+                            break;
+                        case 2:
+                            await ctx.RespondAsync($"{user.Username} está online.");
+                            break;
+                        case 3:
+                            await ctx.RespondAsync($"{user.Username} está offline.");
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (pBBL.UserStatus(user, ctx))
+                    {
+                        case 1:
+                            await ctx.RespondAsync($"{ctx.User.Username} você está pausa.");
+                            break;
+                        case 2:
+                            await ctx.RespondAsync($"{ctx.User.Username} você está online.");
+                            break;
+                        case 3:
+                            await ctx.RespondAsync($"{ctx.User.Username} você está offline.");
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

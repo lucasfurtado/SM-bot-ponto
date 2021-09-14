@@ -97,5 +97,27 @@ namespace PunchTheClock.BBL
                 return -2;
             }
         }
+
+        public int UserStatus(DiscordUser? user, CommandContext ctx)
+        {
+            if(user != null)
+            {
+                if (Users.AllUsers.TryGetValue(user.Id, out User auxUser))
+                {
+                    if (auxUser.IsPaused == true) return 1;
+                    else return 2;
+                }
+                return 3;
+            }
+            else
+            {
+                if (Users.AllUsers.TryGetValue(ctx.User.Id, out User auxUser))
+                {
+                    if (auxUser.IsPaused == true) return 1;
+                    else return 2;
+                }
+                return 3;
+            }
+        }
     }
 }
