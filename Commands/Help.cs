@@ -13,6 +13,7 @@ namespace PunchTheClock.Commands
         [Command("ajuda")]
         public async Task HelpCommand(CommandContext ctx)
         {
+            await ctx.TriggerTypingAsync();
             await ctx.RespondAsync(
                 StaticMessages.Helper.HelloWorld+"\r\n"+
                 StaticMessages.Helper.RandomCommand + "\r\n" +

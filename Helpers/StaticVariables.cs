@@ -9,6 +9,7 @@ namespace PunchTheClock.Helpers
         public static class ChannelsId
         {
             public static ulong PunchInChannel = 885347092783042581;
+            public static ulong DailyChannel = 887782739921760256;
         }
     }
 }

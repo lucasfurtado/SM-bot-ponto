@@ -12,6 +12,7 @@ namespace PunchTheClock.Commands
         [Command("ola")]
         public async Task BotOnline(CommandContext ctx)
         {
+            await ctx.TriggerTypingAsync();
             await ctx.RespondAsync("Olá, eu estou online");
         }
     }

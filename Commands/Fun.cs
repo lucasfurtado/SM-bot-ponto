@@ -17,7 +17,8 @@ namespace PunchTheClock.Commands
         [Command("dorondondon")]
         public async Task N4Speed(CommandContext ctx)
         {
-            if(ctx.Channel.Id != StaticVariables.ChannelsId.PunchInChannel)
+            await ctx.TriggerTypingAsync();
+            if (ctx.Channel.Id != StaticVariables.ChannelsId.PunchInChannel)
             {
                 await ctx.RespondAsync("https://www.youtube.com/watch?v=IYH7_GzP4Tg");
             }
@@ -30,6 +31,7 @@ namespace PunchTheClock.Commands
         [Command("daily")]
         public async Task TestDayli(CommandContext ctx)
         {
+            await ctx.TriggerTypingAsync();
             //ctx.Client.GetVoiceNext();
             if (ctx.Guild.OwnerId == 437051906599157761)
             {
@@ -46,7 +48,7 @@ namespace PunchTheClock.Commands
                 {
                     if(aux.TryGetValue(item, out DiscordMember member))
                     {
-                        await member.PlaceInAsync(ctx.Guild.GetChannel(885345111280599084));
+                        await member.PlaceInAsync(ctx.Guild.GetChannel(StaticVariables.ChannelsId.DailyChannel));
                         //await ctx.Channel.PlaceMemberAsync(member);
                     }
                 }
@@ -56,8 +58,8 @@ namespace PunchTheClock.Commands
         [Command("entry")]
         public async Task Join(CommandContext ctx)
         {
+            await ctx.TriggerTypingAsync();
             var vnexta = ctx.Client.UseVoiceNext();
-
             var vnc = vnexta.GetConnection(ctx.Guild);
             if (vnc != null)
                 throw new InvalidOperationException("Already connected in this guild.");

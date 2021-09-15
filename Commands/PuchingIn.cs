@@ -20,6 +20,7 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar ao bot que entrou.")]
         public async Task GetInAsync(CommandContext ctx)
         {
+            await ctx.TriggerTypingAsync();
             if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
                 PuchingInBBL gBBL = new PuchingInBBL();
@@ -44,6 +45,7 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar que está ausente no momento.")]
         public async Task LunchTimeAsync(CommandContext ctx)
         {
+            await ctx.TriggerTypingAsync();
             if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
                 PuchingInBBL gBBL = new PuchingInBBL();
@@ -67,6 +69,7 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar que o funcionário está voltando da pausa.")]
         public async Task BackInAsync(CommandContext ctx)
         {
+            await ctx.TriggerTypingAsync();
             if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
                 PuchingInBBL gBBL = new PuchingInBBL();
@@ -90,6 +93,7 @@ namespace PunchTheClock.Commands
         [Description("Comando para informar que está saindo e para informar quantas horas o funcionário fez hoje.")]
         public async Task ExitAsync(CommandContext ctx)
         {
+            await ctx.TriggerTypingAsync();
             if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
                 PuchingInBBL gBBL = new PuchingInBBL();
@@ -115,6 +119,7 @@ namespace PunchTheClock.Commands
         [Description("Comando para que o usuário saiba o tempo que está online.")]
         public async Task ReturnTime(CommandContext ctx, [RemainingText] DiscordUser user = null)
         {
+            await ctx.TriggerTypingAsync();
             if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
                 PuchingInBBL pBBL = new PuchingInBBL();
@@ -175,6 +180,7 @@ namespace PunchTheClock.Commands
         [Description("Comando que informa ao usuário qual status no momento do usuário.")]
         public async Task UserStatus(CommandContext ctx, [RemainingText] DiscordUser user = null)
         {
+            await ctx.TriggerTypingAsync();
             if (ctx.Channel.Id == StaticVariables.ChannelsId.PunchInChannel)
             {
                 PuchingInBBL pBBL = new PuchingInBBL();
