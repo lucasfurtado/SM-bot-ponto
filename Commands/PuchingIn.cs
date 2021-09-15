@@ -96,7 +96,7 @@ namespace PunchTheClock.Commands
                 double aux = gBBL.ExitTime(ctx.User.Id);
                 if (aux != 0)
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} saiu às {DateTime.Now.ToString("HH:mm:ss")}" + $"Tempo total: {aux.ToString("F2")}.");
+                    await ctx.RespondAsync($"{ctx.User.Username} saiu às {DateTime.Now.ToString("HH:mm:ss")} " + $"Tempo total: {aux.ToString("F2")}.");
                     await gBBL.RemoveUser(ctx.User.Id);
                 }
                 else

@@ -12,8 +12,10 @@ using DSharpPlus.Entities;
 
 namespace PunchTheClock
 {
-    class Program
+    public class Program
     {
+        public static DiscordClient _discord;
+
         static void Main(string[] args)
         {
             string bearerToken = GetToken();
@@ -22,7 +24,7 @@ namespace PunchTheClock
 
         static async Task MainAsync(string token)
         {
-            DiscordClient discord = new DiscordClient(new DiscordConfiguration()
+            _discord = new DiscordClient(new DiscordConfiguration()
             {
                 Token = token,
                 TokenType = TokenType.Bot,
@@ -33,7 +35,9 @@ namespace PunchTheClock
                 AutoReconnect = true,
             });
 
-            CommandsNextExtension command = discord.UseCommandsNext(new CommandsNextConfiguration()
+            _discord.Ready += Bot_Ready;
+
+            CommandsNextExtension command = _discord.UseCommandsNext(new CommandsNextConfiguration()
             {
                 StringPrefixes = new[] { "!" },
                 CaseSensitive = false,
@@ -45,9 +49,16 @@ namespace PunchTheClock
             command.RegisterCommands<GenerateRandomNumber>();
             command.RegisterCommands<PuchingIn>();
             command.RegisterCommands<Fun>();
+            command.RegisterCommands<Help>();
 
-            await discord.ConnectAsync();
+            await _discord.ConnectAsync();
             await Task.Delay(-1);
+        }
+
+        public static Task Bot_Ready(DiscordClient sender, ReadyEventArgs e)
+        {
+            _discord.UpdateStatusAsync(new DiscordActivity("!ajuda", ActivityType.Playing), UserStatus.Online);
+            return Task.CompletedTask;
         }
 
         public static string GetToken()
