@@ -41,5 +41,22 @@ namespace PunchTheClock.Entities
             return TotalTime;
         }
 
+        public double CalculeteTotalTimeAsPaused()
+        {
+            double pauseTime = 0;
+            if (PausesAt.Count == 1)
+            {
+                TotalTime = (PausesAt[0] - EnterAt).TotalHours;
+            }
+            else
+            {
+                for (int i = 0; i < PausesAt.Count-1; i++)
+                {
+                    pauseTime += (PausesOutAt[i] - PausesAt[i]).TotalHours;
+                }
+                TotalTime = (PausesAt[PausesAt.Count - 1] - EnterAt).TotalHours - pauseTime;
+            }
+            return TotalTime;
+        }
     }
 }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 using PunchTheClock.Helpers;
+using PunchTheClock.Entities;
 
 namespace PunchTheClock.Commands
 {
@@ -95,7 +96,7 @@ namespace PunchTheClock.Commands
                 double aux = gBBL.ExitTime(ctx.User.Id);
                 if (aux != 0)
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} saiu às {DateTime.Now.ToString("HH:mm:ss")} " + $"Tempo total: {aux.ToString("F2", CultureInfo.InvariantCulture)}.");
+                    await ctx.RespondAsync($"{ctx.User.Username} saiu às {DateTime.Now.ToString("HH:mm:ss")}" + $"Tempo total: {aux.ToString("F2")}.");
                     await gBBL.RemoveUser(ctx.User.Id);
                 }
                 else
@@ -124,13 +125,19 @@ namespace PunchTheClock.Commands
                     switch (time)
                     {
                         case -1:
-                            await ctx.RespondAsync($"{user.Username} não foi possível calcular pois o usuário está em pausa e não existe esse método para calcular a hora ainda. Peço perdão pelo vacilo =)");
+                            double currentTime = 0;
+                            if (Users.AllUsers.TryGetValue(user.Id, out User auxUser))
+                            {
+                                currentTime = auxUser.CalculeteTotalTimeAsPaused();
+                            }
+                            await ctx.RespondAsync($"{user.Username} está online tem {currentTime.ToString("F2")} horas.");
+                            //await ctx.RespondAsync($"{user.Username} não foi possível calcular pois o usuário está em pausa e não existe esse método para calcular a hora ainda. Peço perdão pelo vacilo =)");
                             break;
                         case -2:
                             await ctx.RespondAsync($"{user.Username} não entrou ainda.");
                             break;
                         default:
-                            await ctx.RespondAsync($"{user.Username} está online {time.ToString("F2", CultureInfo.InvariantCulture)} horas.");
+                            await ctx.RespondAsync($"{user.Username} está online {time.ToString("F2")} horas.");
                             break;
                     }
                 }
@@ -140,13 +147,19 @@ namespace PunchTheClock.Commands
                     switch (time)
                     {
                         case -1:
-                            await ctx.RespondAsync($"{ctx.User.Username} não foi possível calcular pois você está em pausa e não existe esse método para calcular a hora ainda. Peço perdão pelo vacilo =)");
+                            double currentTime = 0;
+                            if (Users.AllUsers.TryGetValue(ctx.User.Id, out User auxUser))
+                            {
+                                currentTime = auxUser.CalculeteTotalTimeAsPaused();
+                            }
+                            await ctx.RespondAsync($"{ctx.User.Username} você está online tem {currentTime.ToString("F2")} horas. Atenção, você ainda está em pausa!");
+                            //await ctx.RespondAsync($"{ctx.User.Username} não foi possível calcular pois você está em pausa e não existe esse método para calcular a hora ainda. Peço perdão pelo vacilo =)");
                             break;
                         case -2:
                             await ctx.RespondAsync($"{ctx.User.Username} você não entrou ainda.");
                             break;
                         default:
-                            await ctx.RespondAsync($"{ctx.User.Username} está online {time.ToString("F2", CultureInfo.InvariantCulture)} horas.");
+                            await ctx.RespondAsync($"{ctx.User.Username} está online {time.ToString("F2")} horas.");
                             break;
                     }
                 }
@@ -185,7 +198,7 @@ namespace PunchTheClock.Commands
                     switch (pBBL.UserStatus(user, ctx))
                     {
                         case 1:
-                            await ctx.RespondAsync($"{ctx.User.Username} você está pausa.");
+                            await ctx.RespondAsync($"{ctx.User.Username} você está em pausa.");
                             break;
                         case 2:
                             await ctx.RespondAsync($"{ctx.User.Username} você está online.");
