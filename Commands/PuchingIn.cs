@@ -31,7 +31,7 @@ namespace PunchTheClock.Commands
                 }
                 else
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} você já usuou o comando !entrou antes.");
+                    await ctx.RespondAsync($"{ctx.User.Username} você já entrou antes.");
                 }
             }
             else
@@ -51,11 +51,11 @@ namespace PunchTheClock.Commands
                 PuchingInBBL gBBL = new PuchingInBBL();
                 if (gBBL.PauseTime(ctx.User.Id))
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} pausou às {DateTime.Now.ToString("HH:mm:ss")}!");
+                    await ctx.RespondAsync($"{ctx.User.Username} pausou às {DateTime.Now.ToString("HH:mm:ss")}.");
                 }
                 else
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} você não usou o comando !entrei hoje ou você ainda está em pausa!");
+                    await ctx.RespondAsync($"{ctx.User.Username} você não entrou ou você ainda está em pausa.");
                 }
             }
             else
@@ -75,11 +75,11 @@ namespace PunchTheClock.Commands
                 PuchingInBBL gBBL = new PuchingInBBL();
                 if (gBBL.BackIn(ctx.User.Id))
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} voltou às {DateTime.Now.ToString("HH:mm:ss")}!");
+                    await ctx.RespondAsync($"{ctx.User.Username} voltou às {DateTime.Now.ToString("HH:mm:ss")}.");
                 }
                 else
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} você não está em !pausa ou ainda não usou o comando !entrei hoje.");
+                    await ctx.RespondAsync($"{ctx.User.Username} você não pausou antes ou ainda não entrou hoje.");
                 }
             }
             else
@@ -100,12 +100,12 @@ namespace PunchTheClock.Commands
                 double aux = gBBL.ExitTime(ctx.User.Id);
                 if (aux != 0)
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} saiu às {DateTime.Now.ToString("HH:mm:ss")} " + $"Tempo total: {aux.ToString("F2")}.");
+                    await ctx.RespondAsync($"{ctx.User.Username} saiu às {DateTime.Now.ToString("HH:mm:ss")} " + $"Tempo total: {aux.ToString("F2")} horas.");
                     await gBBL.RemoveUser(ctx.User.Id);
                 }
                 else
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} você não usou !entrei hoje ou ainda está em pausa.");
+                    await ctx.RespondAsync($"{ctx.User.Username} você não entrou hoje ou ainda está em pausa.");
                 }
             }
             else

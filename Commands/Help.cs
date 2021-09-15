@@ -14,7 +14,7 @@ namespace PunchTheClock.Commands
         public async Task HelpCommand(CommandContext ctx)
         {
             await ctx.TriggerTypingAsync();
-            await ctx.RespondAsync(
+            await ctx.RespondAsync( "```" +
                 StaticMessages.Helper.HelloWorld+"\r\n"+
                 StaticMessages.Helper.RandomCommand + "\r\n" +
                 StaticMessages.Helper.JoinCommand + "\r\n" +
@@ -22,7 +22,8 @@ namespace PunchTheClock.Commands
                 StaticMessages.Helper.ReJoinCommand + "\r\n" +
                 StaticMessages.Helper.ExitCommand + "\r\n" +
                 StaticMessages.Helper.TimeCommand + "\r\n" +
-                StaticMessages.Helper.StatusCommand + "\r\n"
+                StaticMessages.Helper.StatusCommand + "\r\n" +
+                "```"
                 );
         }
     }

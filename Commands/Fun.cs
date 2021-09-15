@@ -55,18 +55,18 @@ namespace PunchTheClock.Commands
             }
         }
 
-        [Command("entry")]
+        [Command("joinbot")]
         public async Task Join(CommandContext ctx)
         {
             await ctx.TriggerTypingAsync();
             var vnexta = ctx.Client.UseVoiceNext();
             var vnc = vnexta.GetConnection(ctx.Guild);
             if (vnc != null)
-                throw new InvalidOperationException("Already connected in this guild.");
+                throw new InvalidOperationException("EU j´´a estou conectado no canal.");
 
             var chn = ctx.Member?.VoiceState?.Channel;
             if (chn == null)
-                throw new InvalidOperationException("You need to be in a voice channel.");
+                throw new InvalidOperationException("Você precisa estar em um canal para me puxar.");
 
             vnc = await vnexta.ConnectAsync(chn);
             await ctx.RespondAsync("👌");
