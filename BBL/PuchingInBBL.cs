@@ -32,7 +32,7 @@ namespace PunchTheClock.BBL
                 {
                     user.PausesAt.Add(DateTime.Now);
                     user.IsPaused = true;
-                    user.IsOnline = false;
+                    user.IsOnline = true;
                     return true;
                 }
             }
@@ -62,6 +62,13 @@ namespace PunchTheClock.BBL
                 if(!user.IsPaused && user.IsOnline && !user.IsOffline)
                 {
                     totalTime = user.CalculateTotalTime();
+                    user.IsOffline = true;
+                    user.IsOnline = false;
+                    user.IsPaused = false;
+                }
+                else if (user.IsPaused && user.IsOnline && !user.IsOffline)
+                {
+                    totalTime = user.CalculeteTotalTimeAsPaused();
                     user.IsOffline = true;
                     user.IsOnline = false;
                     user.IsPaused = false;

@@ -105,7 +105,7 @@ namespace PunchTheClock.Commands
                 }
                 else
                 {
-                    await ctx.RespondAsync($"{ctx.User.Username} você não entrou hoje ou ainda está em pausa.");
+                    await ctx.RespondAsync($"{ctx.User.Username} você não entrou ainda.");
                 }
             }
             else
