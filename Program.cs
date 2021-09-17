@@ -63,8 +63,8 @@ namespace PunchTheClock
 
         public static string GetToken()
         {
-            //StreamReader reader = new StreamReader("E:\\My Projects\\PunchTheClock\\config.json"); //notebook lucas
-            StreamReader reader = new StreamReader("C:\\Users\\lucas\\Documents\\Punch-In\\bot-punch-the-clock\\config.json");  //computador lucas
+            StreamReader reader = new StreamReader("E:\\My Projects\\PunchTheClock\\config.json"); //notebook lucas
+            //StreamReader reader = new StreamReader("C:\\Users\\lucas\\Documents\\Punch-In\\bot-punch-the-clock\\config.json");  //computador lucas
             string jsonString = reader.ReadToEnd();
             BotToken botToken = JsonConvert.DeserializeObject<BotToken>(jsonString);
             return botToken.Token;

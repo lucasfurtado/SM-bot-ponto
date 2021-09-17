@@ -29,13 +29,12 @@ namespace PunchTheClock.Commands
         }
 
         [Command("daily")]
-        public async Task TestDayli(CommandContext ctx)
+        public async Task TestDayli(CommandContext ctx, [RemainingText] DiscordChannel channel = null)
         {
             await ctx.TriggerTypingAsync();
-            //ctx.Client.GetVoiceNext();
-            if (ctx.Guild.OwnerId == 437051906599157761)
+            ulong dailyChannel = (channel != null) ? channel.Id : StaticVariables.ChannelsId.DailyChannel;
+            if (ctx.Guild.OwnerId == ctx.User.Id)
             {
-                
                 List<DiscordMember> listDiscordMembers = new List<DiscordMember>();
                 List<ulong> listId = new List<ulong>();
                 var aux = ctx.Guild.Members;
@@ -43,13 +42,11 @@ namespace PunchTheClock.Commands
                 {
                     listId = aux.Select(x => x.Key).ToList();
                 }
-
                 foreach (var item in listId)
                 {
                     if(aux.TryGetValue(item, out DiscordMember member))
                     {
-                        await member.PlaceInAsync(ctx.Guild.GetChannel(StaticVariables.ChannelsId.DailyChannel));
-                        //await ctx.Channel.PlaceMemberAsync(member);
+                        await member.PlaceInAsync(ctx.Guild.GetChannel(dailyChannel));
                     }
                 }
             }
@@ -62,7 +59,7 @@ namespace PunchTheClock.Commands
             var vnexta = ctx.Client.UseVoiceNext();
             var vnc = vnexta.GetConnection(ctx.Guild);
             if (vnc != null)
-                throw new InvalidOperationException("EU j´´a estou conectado no canal.");
+                throw new InvalidOperationException("Eu já estou conectado no canal.");
 
             var chn = ctx.Member?.VoiceState?.Channel;
             if (chn == null)
