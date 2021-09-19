@@ -14,19 +14,21 @@ namespace PunchTheClock
 {
     public class Program
     {
-        public static DiscordClient _discord;
+        private static DiscordClient _discord;
 
         static void Main(string[] args)
         {
-            string bearerToken = GetToken();
-            MainAsync(bearerToken).GetAwaiter().GetResult();
+            MainAsync().GetAwaiter().GetResult();
         }
 
-        static async Task MainAsync(string token)
+        static async Task MainAsync()
         {
+            BotToken newToken = new BotToken();
+            newToken.SetToken();
+
             _discord = new DiscordClient(new DiscordConfiguration()
             {
-                Token = token,
+                Token = newToken.Token,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.AllUnprivileged,
                 GatewayCompressionLevel = GatewayCompressionLevel.Stream,
@@ -42,7 +44,7 @@ namespace PunchTheClock
                 StringPrefixes = new[] { "!" },
                 CaseSensitive = false,
                 IgnoreExtraArguments = true,
-                EnableDms = false
+                EnableDms = false,
             });
 
             command.RegisterCommands<Greetings>();
@@ -59,15 +61,6 @@ namespace PunchTheClock
         {
             _discord.UpdateStatusAsync(new DiscordActivity("!ajuda", ActivityType.Playing), UserStatus.Online);
             return Task.CompletedTask;
-        }
-
-        public static string GetToken()
-        {
-            StreamReader reader = new StreamReader("E:\\My Projects\\PunchTheClock\\config.json"); //notebook lucas
-            //StreamReader reader = new StreamReader("C:\\Users\\lucas\\Documents\\Punch-In\\bot-punch-the-clock\\config.json");  //computador lucas
-            string jsonString = reader.ReadToEnd();
-            BotToken botToken = JsonConvert.DeserializeObject<BotToken>(jsonString);
-            return botToken.Token;
         }
     }
 }
