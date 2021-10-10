@@ -43,7 +43,7 @@ namespace PunchTheClock.BBL
         {
             if(Users.AllUsers.TryGetValue(id, out User user))
             {
-                if (user.IsPaused && !user.IsOnline && !user.IsOffline)
+                if (user.IsPaused && user.IsOnline && !user.IsOffline)
                 {
                     user.PausesOutAt.Add(DateTime.Now);
                     user.IsPaused = false;
