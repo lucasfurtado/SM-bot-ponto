@@ -9,58 +9,34 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Entities;
+using Topshelf;
 
 namespace PunchTheClock
 {
     public class Program
     {
-        private static DiscordClient _discord;
-
         static void Main(string[] args)
         {
-            MainAsync().GetAwaiter().GetResult();
-        }
+            //MainAsync().GetAwaiter().GetResult();
 
-        static async Task MainAsync()
-        {
-            BotToken newToken = new BotToken();
-            newToken.SetToken();
-
-            _discord = new DiscordClient(new DiscordConfiguration()
+            var exitCode = HostFactory.Run(x =>
             {
-                Token = newToken.Token,
-                TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged,
-                GatewayCompressionLevel = GatewayCompressionLevel.Stream,
-                ReconnectIndefinitely = true,
-                MinimumLogLevel = LogLevel.Debug,
-                AutoReconnect = true,
+                x.Service<DiscordBot>(d =>
+                {
+                    d.ConstructUsing(disc => new DiscordBot());
+                    d.WhenStarted(disc => disc.MainAsync().GetAwaiter().GetResult());
+                    d.WhenStopped(disc => disc.Stop());
+                });
+
+                x.RunAsLocalSystem();
+
+                x.SetServiceName("ClockBotService");
+                x.SetDisplayName("Clock Bot Service");
+                x.SetDescription("This is my bot in Windows Service");
             });
 
-            _discord.Ready += Bot_Ready;
-
-            CommandsNextExtension command = _discord.UseCommandsNext(new CommandsNextConfiguration()
-            {
-                StringPrefixes = new[] { "!" },
-                CaseSensitive = false,
-                IgnoreExtraArguments = true,
-                EnableDms = false,
-            });
-
-            command.RegisterCommands<Greetings>();
-            command.RegisterCommands<GenerateRandomNumber>();
-            command.RegisterCommands<PuchingIn>();
-            command.RegisterCommands<Fun>();
-            command.RegisterCommands<Help>();
-
-            await _discord.ConnectAsync();
-            await Task.Delay(-1);
-        }
-
-        public static Task Bot_Ready(DiscordClient sender, ReadyEventArgs e)
-        {
-            _discord.UpdateStatusAsync(new DiscordActivity("!ajuda", ActivityType.Playing), UserStatus.Online);
-            return Task.CompletedTask;
+            int exitCodeValue = (int)Convert.ChangeType(exitCode, exitCode.GetTypeCode());
+            Environment.ExitCode = exitCodeValue;
         }
     }
 }

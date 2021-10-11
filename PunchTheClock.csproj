@@ -12,6 +12,7 @@
     <PackageReference Include="DSharpPlus.Lavalink" Version="4.1.0" />
     <PackageReference Include="DSharpPlus.Rest" Version="4.1.0" />
     <PackageReference Include="DSharpPlus.VoiceNext" Version="4.1.0" />
+    <PackageReference Include="Topshelf" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
