@@ -66,9 +66,9 @@ namespace PunchTheClock
             return Task.CompletedTask;
         }
 
-        public string Stop()
+        public async Task Stop()
         {
-            return "parou.";
+            await _discord.DisconnectAsync();
         }
     }
 }

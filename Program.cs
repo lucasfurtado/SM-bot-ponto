@@ -25,7 +25,7 @@ namespace PunchTheClock
                 {
                     d.ConstructUsing(disc => new DiscordBot());
                     d.WhenStarted(disc => disc.MainAsync().GetAwaiter().GetResult());
-                    d.WhenStopped(disc => disc.Stop());
+                    d.WhenStopped(disc => disc.Stop().GetAwaiter().GetResult());
                 });
 
                 x.RunAsLocalSystem();
